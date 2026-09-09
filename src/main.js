@@ -1,4 +1,5 @@
 import './style.css';
+import {asteroidSurface} from './asteroid.js';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {positionAt,pointOnOrbit,spinAngle,daysPerSecond,julianToDate,distance,TAU} from './orbits.js';
@@ -51,11 +52,14 @@ async function boot(){
  const targetRing=new THREE.Mesh(new THREE.RingGeometry(.065,.069,60),new THREE.MeshBasicMaterial({color:GOLD,transparent:true,opacity:.65,side:THREE.DoubleSide,depthWrite:false}));world.add(targetRing);
  const targetGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:glow,color:GOLD,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:.55}));world.add(targetGlow);
  const trailCount=110;const trailGeo=new THREE.BufferGeometry();trailGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(trailCount*3),3));const trailColor=[];for(let k=0;k<trailCount;k++){const a=(k/(trailCount-1))**1.8;trailColor.push(GOLD.r*a,GOLD.g*a,GOLD.b*a)}trailGeo.setAttribute('color',new THREE.Float32BufferAttribute(trailColor,3));const trail=new THREE.Line(trailGeo,new THREE.LineBasicMaterial({vertexColors:true,blending:THREE.AdditiveBlending,transparent:true,opacity:.95}));trail.frustumCulled=false;world.add(trail);
- // A separate enlarged Earth makes the shared spin/orbit clock readable at system scale.
- const earthRenderer=new THREE.WebGLRenderer({antialias:true,alpha:true});earthRenderer.setPixelRatio(Math.min(devicePixelRatio,2));earthRenderer.setSize(100,100);$('earth-globe').append(earthRenderer.domElement);
- const earthScene=new THREE.Scene(),earthCamera=new THREE.PerspectiveCamera(32,1,.1,20);earthCamera.position.set(0,.3,4.8);earthCamera.lookAt(0,0,0);
- const earthTilt=new THREE.Group();earthTilt.rotation.z=-23.439*Math.PI/180;earthScene.add(earthTilt);const earthMesh=new THREE.Mesh(sphere,new THREE.MeshPhongMaterial({map:texture,color:texture?0xffffff:0x548cbf,shininess:20}));earthTilt.add(earthMesh);earthScene.add(new THREE.AmbientLight(0x779cce,.8));const insetLight=new THREE.DirectionalLight(0xffefdb,2.5);insetLight.position.set(-3,2,4);earthScene.add(insetLight);
- const atmosphere=new THREE.Mesh(new THREE.SphereGeometry(1.035,36,24),new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:`varying vec3 n;varying vec3 v;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,fragmentShader:`varying vec3 n;varying vec3 v;void main(){float f=pow(1.-max(dot(n,v),0.),3.);gl_FragColor=vec4(.25,.52,.9,f*.45);}`}));earthScene.add(atmosphere);
+ // An artist's impression; its turntable is independent of the orbital clock.
+ const rockRenderer=new THREE.WebGLRenderer({antialias:true,alpha:true});rockRenderer.setPixelRatio(Math.min(devicePixelRatio,2));rockRenderer.setSize(160,160,false);$('earth-globe').append(rockRenderer.domElement);
+ const rockScene=new THREE.Scene(),rockCamera=new THREE.PerspectiveCamera(32,1,.1,20);rockCamera.position.set(0,.2,5.2);rockCamera.lookAt(0,0,0);
+ const rockGeometry=new THREE.IcosahedronGeometry(1,5),rp=rockGeometry.attributes.position;
+ const colors=[];for(let k=0;k<rp.count;k++){const x=rp.getX(k),y=rp.getY(k),z=rp.getZ(k);rp.setXYZ(k,...asteroidSurface(x,y,z));const shade=.5+.13*Math.sin(x*35+y*21+z*29)+.06*Math.cos(z*83+x*61);colors.push(shade,shade*.91,shade*.8);}
+ rockGeometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));rockGeometry.computeVertexNormals();
+ const rockMesh=new THREE.Mesh(rockGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,flatShading:true}));rockMesh.rotation.z=.3;rockScene.add(rockMesh);
+ rockScene.add(new THREE.AmbientLight(0x8296b0,.65));const keyLight=new THREE.DirectionalLight(0xffe2b9,3.4);keyLight.position.set(-3,3,4);rockScene.add(keyLight);const rimLight=new THREE.DirectionalLight(0x9bbce2,1.1);rimLight.position.set(3,1,-2);rockScene.add(rimLight);
  const ndc=new THREE.Vector3();let transition=null,last=performance.now(),lastInfo=0;const DAY_RANGE=7305;
  function resize(){width=stage.clientWidth;height=stage.clientHeight;renderer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();}
  new ResizeObserver(resize).observe(stage);
@@ -70,7 +74,7 @@ async function boot(){
  $('play').addEventListener('click',togglePlay);syncPlay();
  $('reverse').addEventListener('click',()=>{direction*=-1;$('reverse').setAttribute('aria-pressed',String(direction<0));});
  $('speed').addEventListener('change',()=>{mode=$('speed').value;updateSpeed();});
- function updateSpeed(){const rate=daysPerSecond(mode,earth.period);$('speed-description').textContent=Math.round(rate*86400).toLocaleString()+'× real time';$('clock-caption').textContent=mode==='day'?'One spin. Five seconds.':mode==='year'?'One orbit. Five seconds.':'One orbit. Thirty seconds.';}
+ function updateSpeed(){const rate=daysPerSecond(mode,earth.period);$('speed-description').textContent=Math.round(rate*86400).toLocaleString()+'× real time';}
  $('timeline').addEventListener('input',()=>{jd=data.epochJD+Number($('timeline').value);updateInfo()});
  $('reset').addEventListener('click',()=>{jd=data.epochJD;direction=1;$('reverse').setAttribute('aria-pressed','false');updateInfo();});
  document.addEventListener('keydown',e=>{if(e.code==='Space'&&!['INPUT','SELECT','BUTTON','A'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();togglePlay();}if(e.key==='Escape')stopFollow();});
@@ -93,7 +97,7 @@ async function boot(){
   controls.update();
   const aobj=objects.get('gartenberg');targetRing.position.copy(aobj.group.position);targetRing.quaternion.copy(camera.quaternion);const targetScale=camera.position.distanceTo(aobj.group.position)/10;targetRing.scale.setScalar(targetScale);targetGlow.position.copy(aobj.group.position);targetGlow.scale.setScalar(.3*targetScale);
   for(let k=0;k<trailCount;k++){const p=vec(positionAt(asteroid,jd-(1-k/(trailCount-1))*asteroid.period*.14*direction));trailGeo.attributes.position.setXYZ(k,p.x,p.y,p.z)}trailGeo.attributes.position.needsUpdate=true;
-  earthMesh.rotation.y=spinAngle(elapsed,physical.earth.spin)%TAU;renderer.render(scene,camera);earthRenderer.render(earthScene,earthCamera);
+  if(playing&&!document.querySelector('dialog[open]'))rockMesh.rotation.y+=dt*TAU/24;renderer.render(scene,camera);rockRenderer.render(rockScene,rockCamera);
   const occupied=[];positionLabel(aobj.label,aobj.group.position,7,occupied,true);for(const o of [...objects.values()].sort((a,b)=>(a.b.id==='earth'?-1:b.b.id==='earth'?1:0))){if(o===aobj)continue;positionLabel(o.label,o.group.position,6,occupied)}positionLabel(sunLabel,new THREE.Vector3(),10,occupied);
   if(now-lastInfo>160){updateInfo();lastInfo=now;}
  }

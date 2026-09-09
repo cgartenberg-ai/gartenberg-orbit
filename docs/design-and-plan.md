@@ -12,3 +12,7 @@ Implementation sequence:
 3. Build complete recognizable orbital scene, information panel, timeline and view controls; open local preview.
 4. Finish interactions, mobile layout, keyboard handling, reduced motion and rendering error fallback.
 5. Run calculation tests and production build. Publish isolated GitHub repo/site, verify live assets. Keep academic site untouched.
+
+
+## Asteroid close-up — September 9, 2026
+User requested an illustrative replacement for the Earth inset, with a discreet qualifier. Build a deterministic irregular cratered rock, warm key light and cool rim light; use a 24-second presentation turntable (not a physical spin estimate), pause with the simulation and respect reduced motion. Keep Earth in the actual solar system. Verify geometry, orbital tests and production build before publishing.
