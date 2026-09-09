@@ -24,7 +24,7 @@ function planetMaterial(color,bands=false){
 async function boot(){
  const response=await fetch('./data/orbits.json');if(!response.ok)throw Error('Could not load orbital data');const data=await response.json();
  const bodies=data.bodies;const asteroid=bodies.find(b=>b.id==='gartenberg'),earth=bodies.find(b=>b.id==='earth');
- let jd=data.epochJD,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,mode='day',direction=1,selected=asteroid,following=false,view='inner';
+ let jd=data.epochJD,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,mode='year',direction=1,selected=asteroid,following=false,view='inner';
  const stage=$('universe'),labels=$('labels');let width=stage.clientWidth,height=stage.clientHeight;
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(width,height);renderer.setClearColor(0x080c11,1);renderer.outputColorSpace=THREE.SRGBColorSpace;stage.append(renderer.domElement);
  const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(43,width/height,.01,1500);camera.position.set(4.0,6.6,8.9);

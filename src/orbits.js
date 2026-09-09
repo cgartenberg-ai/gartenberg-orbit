@@ -20,5 +20,5 @@ export function positionAt(b,jd){
 export const dateToJulian=d=>d.getTime()/86400000+2440587.5;
 export const julianToDate=jd=>new Date((jd-2440587.5)*86400000);
 export const spinAngle=(elapsedDays,periodHours)=>elapsedDays*24/periodHours*TAU;
-export const daysPerSecond=(mode,earthPeriod=365.256363004)=>mode==='day'?.99726968/5:mode==='year'?earthPeriod/5:earthPeriod/30;
+export const daysPerSecond=(mode,earthPeriod=365.256363004)=>mode==='day'?.99726968/5:mode==='year'?earthPeriod/3:earthPeriod/30;
 export const distance=(a,b=[0,0,0])=>Math.hypot(...a.map((v,i)=>v-b[i]));
