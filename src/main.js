@@ -37,7 +37,7 @@ async function boot(){
  const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starsPos,3));starGeo.setAttribute('color',new THREE.Float32BufferAttribute(starsColor,3));const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({size:.12,sizeAttenuation:true,vertexColors:true,transparent:true,opacity:.75,depthWrite:false}));scene.add(stars);
  const glow=glowTexture();const sun=new THREE.Mesh(new THREE.SphereGeometry(.07,40,24),new THREE.MeshBasicMaterial({color:0xffe8b7}));world.add(sun);const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glow,color:0xffc77e,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));halo.scale.setScalar(1.75);world.add(halo);
  const sunlight=new THREE.PointLight(0xfff0d9,2.6,0,0);world.add(sunlight);scene.add(new THREE.AmbientLight(0xa4b6d0,.35));
- const texture=await new THREE.TextureLoader().loadAsync('./textures/earth.jpg').catch(()=>null);if(texture){texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;}
+ const texture=await new THREE.TextureLoader().loadAsync('./textures/earth.png').catch(()=>null);if(texture){texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;}
  const objects=new Map();const sphere=new THREE.SphereGeometry(1,40,28);
  for(const b of bodies){const ph=physical[b.id];const pts=[];for(let k=0;k<=512;k++)pts.push(vec(pointOnOrbit(b,k/512*TAU)));const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:ph.color,transparent:true,opacity:b.id==='gartenberg'?.75:.22}));world.add(line);
   const group=new THREE.Group();world.add(group);const tilt=new THREE.Group();tilt.rotation.z=ph.tilt*Math.PI/180;group.add(tilt);

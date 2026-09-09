@@ -19,3 +19,5 @@ AU distances are linear and shared. Visible planet sizes are exaggerated and ada
 ## Interaction
 
 Drag/pinch/scroll to rotate and zoom; view presets frame the inner or whole system. Click a body label to inspect, and Follow to keep it centered. All controls are keyboard accessible. Space toggles playback outside form controls. Reduced-motion users start paused. Data and story dialogs pause time while open. All data and texture assets are bundled locally.
+
+Earth texture: NASA Blue Marble, land surface/ocean/ice, https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/land_ocean_ice_2048.png (public NASA imagery).
