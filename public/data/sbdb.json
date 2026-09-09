@@ -1,0 +1,161 @@
+{
+  "signature": {
+    "version": "1.3",
+    "source": "NASA/JPL Small-Body Database (SBDB) API"
+  },
+  "orbit": {
+    "not_valid_before": null,
+    "comment": null,
+    "sb_used": "SB441-N16",
+    "orbit_id": "28",
+    "n_obs_used": 690,
+    "rms": ".53348",
+    "condition_code": "0",
+    "producer": "Otto Matic",
+    "data_arc": "9981",
+    "two_body": null,
+    "t_jup": "3.638",
+    "equinox": "J2000",
+    "n_del_obs_used": null,
+    "soln_date": "2025-08-02 01:25:07",
+    "model_pars": [],
+    "source": "JPL",
+    "moid": ".89839",
+    "pe_used": "DE441",
+    "elements": [
+      {
+        "sigma": "3.4627E-8",
+        "value": ".1431765485486854",
+        "label": "e",
+        "units": null,
+        "title": "eccentricity",
+        "name": "e"
+      },
+      {
+        "sigma": "6.8435E-9",
+        "title": "semi-major axis",
+        "name": "a",
+        "value": "2.21655446707677",
+        "label": "a",
+        "units": "au"
+      },
+      {
+        "label": "q",
+        "units": "au",
+        "value": "1.899195848810547",
+        "name": "q",
+        "title": "perihelion distance",
+        "sigma": "7.8542E-8"
+      },
+      {
+        "sigma": "3.1561E-6",
+        "title": "inclination; angle with respect to x-y ecliptic plane",
+        "name": "i",
+        "value": "2.583300141217982",
+        "units": "deg",
+        "label": "i"
+      },
+      {
+        "sigma": "7.9665E-5",
+        "value": "110.7583562837854",
+        "units": "deg",
+        "label": "node",
+        "title": "longitude of the ascending node",
+        "name": "om"
+      },
+      {
+        "sigma": "8.0408E-5",
+        "value": "256.0368950067061",
+        "units": "deg",
+        "label": "peri",
+        "title": "argument of perihelion",
+        "name": "w"
+      },
+      {
+        "units": "deg",
+        "label": "M",
+        "value": "6.385270733246378",
+        "name": "ma",
+        "title": "mean anomaly",
+        "sigma": "1.1883E-5"
+      },
+      {
+        "sigma": "3.974E-5",
+        "name": "tp",
+        "title": "time of perihelion passage",
+        "units": "TDB",
+        "label": "tp",
+        "value": "2461179.120730914691"
+      },
+      {
+        "sigma": "5.5822E-6",
+        "title": "sidereal orbital period",
+        "name": "per",
+        "value": "1205.357954618476",
+        "label": "period",
+        "units": "d"
+      },
+      {
+        "name": "n",
+        "title": "mean motion",
+        "label": "n",
+        "units": "deg/d",
+        "value": ".2986664655263741",
+        "sigma": "1.3832E-9"
+      },
+      {
+        "value": "2.533913085342992",
+        "units": "au",
+        "label": "Q",
+        "title": "aphelion distance",
+        "name": "ad",
+        "sigma": "7.8233E-9"
+      }
+    ],
+    "not_valid_after": null,
+    "epoch": "2461200.5",
+    "first_obs": "1998-03-03",
+    "cov_epoch": "2458494.5",
+    "last_obs": "2025-06-30",
+    "n_dop_obs_used": null,
+    "moid_jup": "2.91461"
+  },
+  "phys_par": [
+    {
+      "sigma": null,
+      "desc": "absolute magnitude (magnitude at 1 au from Sun and observer)",
+      "units": null,
+      "notes": null,
+      "value": "16.96",
+      "name": "H",
+      "title": "absolute magnitude",
+      "ref": "E2024C60"
+    }
+  ],
+  "object": {
+    "neo": false,
+    "orbit_class": {
+      "name": "Main-belt Asteroid",
+      "code": "MBA"
+    },
+    "prefix": null,
+    "kind": "an",
+    "fullname": "147704 Gartenberg (2005 GN205)",
+    "orbit_id": "28",
+    "shortname": "147704 Gartenberg",
+    "des": "147704",
+    "spkid": "20147704",
+    "pha": false
+  },
+  "discovery": {
+    "citation": "Claudine Madras Gartenberg (b. 1975) is an American professor of management at the University of Pennsylvania.  As a high-school scientist, she performed light-curve measurements of asteroid (951) Gaspra, deducing its rotation period and shape in advance of the 1991 Galileo spacecraft flyby.  Her asteroid work was recognized by a 1992 Westinghouse Prize.",
+    "who": "Buie, M. W.",
+    "site": null,
+    "discovery": "",
+    "date": "2005-Apr-11",
+    "cref": "WGSBN Bull. 5, #28, 13",
+    "name": "Gartenberg",
+    "location": "Kitt Peak",
+    "ref": "20070106/Numbers.arc"
+  }
+}

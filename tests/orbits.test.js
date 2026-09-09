@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {solveKepler, positionAt, pointOnOrbit, spinAngle, daysPerSecond, julianToDate, dateToJulian} from '../src/orbits.js';
+const near=(a,b,t=1e-9)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b}`);
+test('Kepler equation converges for circular and highly eccentric orbits',()=>{for(const e of [0,.15,.8,.99])for(const M of [-3,-.1,0,.1,2.9]){const E=solveKepler(M,e);near(E-e*Math.sin(E),M)}});
+test('ellipse has physically correct perihelion, aphelion and inclination',()=>{const b={a:3,e:.2,i:30,node:0,argPeri:0};near(Math.hypot(...pointOnOrbit(b,0)),2.4);near(Math.hypot(...pointOnOrbit(b,Math.PI)),3.6);const p=pointOnOrbit(b,Math.PI/2);near(p[2],3*Math.sqrt(.96)*.5)});
+test('orbital propagation closes after a full period',()=>{const b={a:2.8,e:.18,i:12,node:100,argPeri:67,M:24,n:360/1711,epoch:2461292.5};const x=positionAt(b,b.epoch);const y=positionAt(b,b.epoch+1711);x.forEach((v,i)=>near(v,y[i]))});
+test('all nine heliocentric positions match independent JPL vectors at epoch',()=>{const data=JSON.parse(fs.readFileSync('public/data/orbits.json'));for(const body of data.bodies){const p=positionAt(body,body.epoch);p.forEach((v,i)=>near(v,body.referencePosition[i],1e-8))}});
+test('one shared clock gives exactly a spin or orbit per five seconds',()=>{near(daysPerSecond('day')*5,.99726968);near(daysPerSecond('year')*5,365.256363004);near(spinAngle(.99726968,23.93447232),Math.PI*2);near(spinAngle(.99726968/2,23.93447232),Math.PI)});
+test('Julian epoch conversion round trips',()=>{const d=new Date('2026-09-09T00:00:00Z');near(dateToJulian(d),2461292.5);assert.equal(julianToDate(dateToJulian(d)).toISOString(),d.toISOString())});
